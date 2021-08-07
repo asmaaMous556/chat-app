@@ -50,13 +50,16 @@ export const SINGLE_CONVERSATION_QUERY = gql`
 `;
 
 export const USERS_QUERY = gql`
-  query users {
-    users(token: $token)
+  query users($token:String!) {
+    users(token: $token){
+      users
+    }
   }
 `;
 
-export const DELETE_CONVERSATION_MUTATION = gql`
-  mutation deleteConversation {
+export const DELETE_CONVERSATION_MUTATION = gql
+`
+  mutation deleteConversation($token:String!,$conversationId:String!) {
     deleteConversation(token: $token, conversationId: $conversationId) {
       message
     }

@@ -92,10 +92,10 @@ img{ max-width:100%;}
 }
 
  .sent_msg p {
-  background: #05728f none repeat scroll 0 0;
+  background: #fff none repeat scroll 0 0;
   border-radius: 3px;
   font-size: 14px;
-  margin: 0; color:#fff;
+  margin: 0; color:black;
   padding: 5px 10px 5px 12px;
   width:100%;
 }
@@ -113,9 +113,9 @@ img{ max-width:100%;}
   width: 100%;
 }
 
-.type_msg {border-top: 1px solid #c4c4c4;position: relative;}
+.type_msg {border-top: 1px solid #c4c4c4;position: relative; width: 600px;}
 .msg_send_btn {
-  background-color: #05728f ;
+  background-color: #128C7E ;
   border: none;
   border-radius: 6px;
   color: #fff;
@@ -131,4 +131,10 @@ img{ max-width:100%;}
 .msg_history {
   height: 516px;
   overflow-y: auto;
+}
+.whatsapp-background{
+  background-image: url('../../../assets/whatsapp.png') ;
+  background-repeat: repeat ;
+  background-position: center;
+  
 }
