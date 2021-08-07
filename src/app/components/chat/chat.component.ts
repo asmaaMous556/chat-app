@@ -19,6 +19,7 @@ export class ChatComponent implements OnInit {
   getconversationsError:string='';
   foundedConversation:boolean=false;
   recievedUser:string='';
+  conversationId:string='';
   
   defaultConversationId: string='';
   CurrentConversationId: string='';
@@ -32,6 +33,7 @@ export class ChatComponent implements OnInit {
     this.token = localStorage.getItem('token');
 
     this.getAllConversations();
+    
   // this.getUsers()
     
    
@@ -98,11 +100,14 @@ export class ChatComponent implements OnInit {
       }
     }).valueChanges.subscribe((res:any)=>{
       this.recievedUser=res.data.conversation.userTwo
-      console.log()
+     
       this.messages=res.data?.conversation.messages;
+      console.log(id);
+      this.conversationId=id;
+      this.subscribeMessage(this.conversationId)
       console.log(this.messages[0].date)
     });
-     this.subscribeMessage(id);
+     
 
   }
 

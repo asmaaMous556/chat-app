@@ -7,7 +7,9 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { ChatComponent } from './components/chat/chat.component';
 import {HttpClientModule} from '@angular/common/http';
+import {WebSocketLink} from '@apollo/client/link/ws';
 import {APOLLO_OPTIONS} from 'apollo-angular';
+
 import {HttpLink} from 'apollo-angular/http';
 import {InMemoryCache} from '@apollo/client/core';
 import { GraphQLModule } from './graphql.module';
@@ -27,7 +29,9 @@ import { GraphQLModule } from './graphql.module';
      GraphQLModule,
      
   ],
-  providers: [],
+  providers: [
+    
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
