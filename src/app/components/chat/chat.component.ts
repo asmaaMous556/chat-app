@@ -32,6 +32,7 @@ export class ChatComponent implements OnInit {
   messageDeleted: string = '';
   getconversationsError: string = '';
   foundedConversation: boolean = false;
+  userName:string='';
 
   recievedUser: string = '';
   conversationId: string = '';
@@ -39,6 +40,9 @@ export class ChatComponent implements OnInit {
 
   defaultConversationId: string = '';
   CurrentConversationId: string = '';
+  message: any;
+  auther: any;
+  senderUser: any;
   constructor(private fb: FormBuilder, private Apollo: Apollo) {}
 
   ngOnInit(): void {
@@ -119,6 +123,7 @@ export class ChatComponent implements OnInit {
       },
     }).valueChanges.subscribe((res: any) => {
       this.recievedUser = res.data.conversation.userTwo;
+      this.senderUser=res.data.conversation.userOne;
       this.conversationId = id;
       this.messages = res.data.conversation.messages;
     // this.messages.forEach(item=> {
@@ -128,9 +133,11 @@ export class ChatComponent implements OnInit {
       // console.log(this.conversationId);
       console.log(this.messages)
      this.subscribeMessage(this.conversationId).subscribe((res:any)=>{
+       this.message = res.data.message.message;
+       this.auther=res.data.message.message.auther;
        this.messages=[...this.messages , res.data.message]
       
-     })
+     });
     
     });
   }

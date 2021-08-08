@@ -4,8 +4,7 @@
       <div class="col-4 mt-5">
         <div
           class="alert alert-success"
-          *ngIf="getconversationsError && foundedConversation == false"
-        >
+          *ngIf="getconversationsError && foundedConversation == false">
           {{ getconversationsError }}
         </div>
         <div class="alert alert-danger" *ngIf="messageDeleted">
@@ -25,8 +24,7 @@
               </button>
               <button
                 class="border-0 bg-white"
-                (click)="deleteConversation(conversation._id)"
-              >
+                (click)="deleteConversation(conversation._id)">
                 <img
                   class="mw-100"
                   style="width: 20px"
@@ -55,31 +53,30 @@
           <div class="mesgs">
             <div class="msg_history">
               <div class="outgoing_msg">
-                <div class="sent_msg">
-                  <div class="" *ngFor="let message of messages">
-                    <p>{{ message.message }}</p>
+                <div [ngClass]="senderUser===auther ? 'sent_msg' :'received_withd_msg'" *ngFor="let message of messages">
+               
+                      {{ message.message }}
                     <div class="d-flex justify-content-end align-items-center mb-3" >
-                      <span class="time_date text-end mt-0">{{message.date | date}}</span>
+                      <span class="time_date text-end mt-0">
+                        {{message.date | date}}
+                      </span>
                     </div>
-                  </div>
+                  
                 </div>
               </div>
+<!-- 
               <div class="incoming_msg">
-                <div class="received_msg">
-                  <div class="received_withd_msg">
-                    <div class="">
-                      <!-- <p>
+                <div class="received_msg"> -->
+                  <!-- <div class="received_withd_msg">
                         We work directly with our designers and suppliers, and
                         sell direct to you, which means quality, exclusive
                         products, at a price anyone can afford.
-                      </p> -->
-                    </div>
-                    <span class="time_date">
+                      <span class="time_date">
                       <span class="time_date"></span
                     ></span>
-                  </div>
-                </div>
-              </div>
+                  </div> -->
+                <!-- </div>
+              </div> -->
             </div>
             <div class="type_msg">
               <div class="input_msg_write">
