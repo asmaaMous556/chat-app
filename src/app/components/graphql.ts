@@ -55,9 +55,7 @@ export const SINGLE_CONVERSATION_QUERY = gql`
 
 export const USERS_QUERY = gql`
   query users($token:String!) {
-    users(token: $token){
-      users
-    }
+    users(token: $token)
   }
 `;
 
@@ -78,11 +76,13 @@ export const LOGOUT_MUTATION = gql`
   }
 `;
 
-export const SUBSCRIPTION= gql`
-subscription message($token:String!,$conversationId:String!){
-  message(token:$token, conversationId:$conversationId)
-  {
-    message
+export const SUBSCRIBTION= gql`
+
+subscription message ($token:String!,$conversationId:String!){
+  message(token:$token,conversationId:$conversationId){
+    message,
+    date,
+    author
   }
 }
 `

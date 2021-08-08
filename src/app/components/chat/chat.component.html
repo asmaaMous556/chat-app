@@ -2,44 +2,64 @@
   <div class="messaging">
     <div class="row mt-5">
       <div class="col-4 mt-5">
-        <div class="alert alert-success" *ngIf="getconversationsError && foundedConversation==false">{{getconversationsError}}</div>
-        <div class="alert alert-danger" *ngIf="messageDeleted">{{messageDeleted}}</div>
+        <div
+          class="alert alert-success"
+          *ngIf="getconversationsError && foundedConversation == false"
+        >
+          {{ getconversationsError }}
+        </div>
+        <div class="alert alert-danger" *ngIf="messageDeleted">
+          {{ messageDeleted }}
+        </div>
         <ul class="list-group">
           <li
             class="list-group-item"
             *ngFor="let conversation of conversations"
           >
-          <div class="d-flex justify-content-between align-items-center">
-            <button
-            (click)="getConversation(conversation._id)"
-            class="border-0 bg-white">
-            {{ conversation.userTwo | titlecase }}
-          </button>
-          <button class="border-0 bg-white" (click)="deleteConversation(conversation._id)">
-            <img class="mw-100" style="width:20px;" src="../../../assets/trash-9-xxl.png" alt="">
-          </button>
-          </div>
+            <div class="d-flex justify-content-between align-items-center">
+              <button
+                (click)="getConversation(conversation._id)"
+                class="border-0 bg-white"
+              >
+                {{ conversation.userTwo | titlecase }}
+              </button>
+              <button
+                class="border-0 bg-white"
+                (click)="deleteConversation(conversation._id)"
+              >
+                <img
+                  class="mw-100"
+                  style="width: 20px"
+                  src="../../../assets/trash-9-xxl.png"
+                  alt=""
+                />
+              </button>
+            </div>
           </li>
         </ul>
-        <div class="">
-          Wanna <a href="" (click)="logout()">Logout?</a>
-        </div>
+        <!-- <div class="my-3 fw-bold">All Users</div>
+        <ul class="list-group">
+          <li class="list-group-item" *ngFor="let user of users">
+            <div class="d-flex justify-content-between align-items-center">
+             <button class="bg-transparent border-0" (click)="setUser(user)" >
+              {{ user | titlecase}}
+             </button>
+            </div>
+          </li>
+        </ul> -->
+        <div class="">Wanna <a href="" (click)="logout()">Logout?</a></div>
       </div>
-      <div class="col-8 " *ngIf="messages">
+      <div class="col-8" *ngIf="messages">
         <h3 class="text-center">Messaging</h3>
         <div class="inbox_msg whatsapp-background">
           <div class="mesgs">
-            <div class="msg_history" >
+            <div class="msg_history">
               <div class="outgoing_msg">
                 <div class="sent_msg">
                   <div class="" *ngFor="let message of messages">
                     <p>{{ message.message }}</p>
-                    <div
-                      class="d-flex justify-content-end align-items-center mb-3"
-                    >
-                      <span class="time_date text-end mt-0">{{
-                        message.date | date
-                      }}</span>
+                    <div class="d-flex justify-content-end align-items-center mb-3" >
+                      <span class="time_date text-end mt-0">{{message.date | date}}</span>
                     </div>
                   </div>
                 </div>
