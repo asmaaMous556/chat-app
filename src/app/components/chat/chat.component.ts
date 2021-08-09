@@ -1,3 +1,6 @@
+import { Apollo } from 'apollo-angular';
+import { ChatService } from './../../services/chat.service';
+import { AuthService } from './../../services/auth.service';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { messageInput } from './../../models/messageInput';
 import {
@@ -10,7 +13,6 @@ import {
   USERS_QUERY,
   SUBSCRIBTION,
 } from './../graphql';
-import { Apollo } from 'apollo-angular';
 import { Component, ComponentFactoryResolver, OnInit } from '@angular/core';
 import {
   FormBuilder,
@@ -18,6 +20,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { Observable } from '@apollo/client/utilities';
 
 @Component({
   selector: 'app-chat',
@@ -33,6 +36,7 @@ export class ChatComponent implements OnInit {
   getconversationsError: string = '';
   foundedConversation: boolean = false;
   userName:string='';
+  x!: Observable<any>
 
   recievedUser: string = '';
   conversationId: string = '';
@@ -40,10 +44,11 @@ export class ChatComponent implements OnInit {
 
   defaultConversationId: string = '';
   CurrentConversationId: string = '';
-  message: any;
-  auther: any;
-  senderUser: any;
-  constructor(private fb: FormBuilder, private Apollo: Apollo) {}
+  message:string='';
+  senderUser: string='';
+  author: string='';
+  constructor(private fb: FormBuilder,
+     private Apollo: Apollo, private AuthService:AuthService,private chatService:ChatService) {}
 
   ngOnInit(): void {
     this.messageForm = this.fb.group({
@@ -59,18 +64,9 @@ export class ChatComponent implements OnInit {
   sendMessage(messageForm: any) {
     // console.log(messageForm.message);
     // console.log(this.recievedUser);
-    this.Apollo.mutate({
-      mutation: SEND_MESSAGE_MUTATION,
-      variables: {
-        messageInput: {
-          targetUsername: this.recievedUser='asmaa',
-          message: messageForm.message,
-          token: this.token,
-        },
-      },
-    }).subscribe((res: any) => {
+   this.chatService.sendMessage(this.recievedUser,messageForm.message,this.token).subscribe((res: any) => {
       console.log(res)
-     this.getAllConversations();
+    // this.getAllConversations();
       //this.getConversation(this.conversationId);
     }),
       (error: any) => {
@@ -80,12 +76,7 @@ export class ChatComponent implements OnInit {
   }
 
   getAllConversations() {
-    this.Apollo.watchQuery({
-      query: GET_CONVERSATION_QUERY,
-      variables: {
-        token: this.token,
-      },
-    }).valueChanges.subscribe(
+   this.chatService.getAllConversations(this.token).valueChanges.subscribe(
       (res: any) => {
         console.log(res.data.getConversations);
         this.conversations = res.data.getConversations;
@@ -115,13 +106,7 @@ export class ChatComponent implements OnInit {
 
   getConversation(id: string) {
     // this.CurrentConversationId = id;
-    this.Apollo.watchQuery({
-      query: SINGLE_CONVERSATION_QUERY,
-      variables: {
-        token: this.token,
-        _id: id,
-      },
-    }).valueChanges.subscribe((res: any) => {
+    this.chatService.getSingleConversation(this.token, id).valueChanges.subscribe((res: any) => {
       this.recievedUser = res.data.conversation.userTwo;
       this.senderUser=res.data.conversation.userOne;
       this.conversationId = id;
@@ -131,24 +116,25 @@ export class ChatComponent implements OnInit {
     //  });
       // console.log(...this.messages);
       // console.log(this.conversationId);
+     
       console.log(this.messages)
-     this.subscribeMessage(this.conversationId).subscribe((res:any)=>{
-       this.message = res.data.message.message;
-       this.auther=res.data.message.message.auther;
-       this.messages=[...this.messages , res.data.message]
+      if(this.x){
+        (this.x as any).unsubscribe()
+      }
       
-     });
+      this.x =this.subscribeMessage(this.conversationId).subscribe((res:any)=>{
+        this.message = res.data.message.message;
+        this.author=res.data.message.message.author;
+        this.messages=[...this.messages , res.data.message]      
+      }) as any;
+
+     
     
     });
   }
 
   logout() {
-    this.Apollo.mutate({
-      mutation: LOGOUT_MUTATION,
-      variables: {
-        token: this.token,
-      },
-    }).subscribe(
+  this.AuthService.logOut(this.token).subscribe(
       (data: any) => {
         if (data) {
           console.log(data);
@@ -162,23 +148,21 @@ export class ChatComponent implements OnInit {
   }
 
   deleteConversation(id: string) {
-    this.Apollo.mutate({
-      mutation: DELETE_CONVERSATION_MUTATION,
-      variables: {
-        token: this.token,
-        conversationId: id,
-      },
-    }).subscribe(
+    this.chatService.deleteConversation(id,this.token).subscribe(
       (res: any) => {
         this.messageDeleted = res?.data.deleteConversation.message;
-
+        this.conversations = this.conversations.filter((conversation)=>{
+          return conversation._id !== id
+        })
+        console.log(this.conversations);
+        
         // console.log(res);
       },
       (error) => {
         // console.log(error);
       }
     );
-    this.getAllConversations();
+   
   }
 
   getUsers() {
@@ -198,13 +182,9 @@ export class ChatComponent implements OnInit {
 
   subscribeMessage(id: string) {
     console.log(id);
-  return  this.Apollo.subscribe({
-      query: SUBSCRIBTION,
-      variables: {
-        token: this.token,
-        conversationId: id,
-      },
-    })
+
+   return  this.chatService.messageSubscribtion(this.token,id);
+   
   }
 
   setUser(user: string) {

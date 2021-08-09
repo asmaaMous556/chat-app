@@ -1,3 +1,4 @@
+import { AuthService } from './../../services/auth.service';
 import { LOGIN_QUERY } from './../graphql';
 import { userInput } from './../../models/userInput';
 import { Apollo } from 'apollo-angular';
@@ -16,7 +17,10 @@ export class LoginComponent implements OnInit {
   loginForm:any ;
   error:any;
   token:string='';
-  constructor(private fb :FormBuilder, private apollo:Apollo ,private router: Router) { }
+ 
+  constructor(private fb :FormBuilder, private apollo:Apollo ,private router: Router
+   , private AuthService:AuthService
+    ) { }
 
   ngOnInit(): void {
     this.loginForm=this.fb.group({
@@ -28,15 +32,7 @@ export class LoginComponent implements OnInit {
   login(userInput:userInput){
     console.log(userInput.name);
    
-    this.apollo.query({
-      query : LOGIN_QUERY,
-      variables:{
-        userInput :{
-          username: userInput.name,
-          password :userInput.password
-        }
-      }
-    }).subscribe((res:any)=>{
+   this.AuthService.login(userInput).subscribe((res:any)=>{
       if(res){
         this.token=res.data.login.token;
         localStorage.setItem('token',this.token);

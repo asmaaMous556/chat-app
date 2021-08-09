@@ -52,8 +52,10 @@
         <div class="inbox_msg whatsapp-background">
           <div class="mesgs">
             <div class="msg_history">
-              <div class="outgoing_msg">
-                <div [ngClass]="senderUser===auther ? 'sent_msg' :'received_withd_msg'" *ngFor="let message of messages">
+              <div class="outgoing_msg ">
+               
+             
+                <div [ngClass]=" senderUser=== author ? ' sent_msg' :'received_withd_msg' " *ngFor="let message of messages">
                
                       {{ message.message }}
                     <div class="d-flex justify-content-end align-items-center mb-3" >
@@ -64,19 +66,6 @@
                   
                 </div>
               </div>
-<!-- 
-              <div class="incoming_msg">
-                <div class="received_msg"> -->
-                  <!-- <div class="received_withd_msg">
-                        We work directly with our designers and suppliers, and
-                        sell direct to you, which means quality, exclusive
-                        products, at a price anyone can afford.
-                      <span class="time_date">
-                      <span class="time_date"></span
-                    ></span>
-                  </div> -->
-                <!-- </div>
-              </div> -->
             </div>
             <div class="type_msg">
               <div class="input_msg_write">
